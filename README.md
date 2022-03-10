@@ -15,6 +15,10 @@ This project uses [TypeScript](https://www.typescriptlang.org/) with very modern
 
 Note: This command works only with the non-production build
 
+### Environment variables
+
+-   `EXCHANGE_RATES_API_KEY` from https://exchangeratesapi.io/pricing/
+
 ## Quality
 
 This project utilizes automated testing of various types.

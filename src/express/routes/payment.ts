@@ -43,7 +43,14 @@ router.post(
 router.get(
     '/allWithFees',
     asyncWrapper(async (req, res) => {
-        const result = await paymentInteractor.listWithFees();
+        const { currency } = req.query;
+
+        if (validation.exists(currency) && !validation.isCurrency(currency)) {
+            res.status(400).send('validation/currency');
+            return;
+        }
+
+        const result = await paymentInteractor.listWithFees(currency);
         handleInteractorResult<ListWithFeesSuccess, never>(
             result,
             success => {

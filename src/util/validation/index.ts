@@ -16,9 +16,14 @@ function isUuid(o: unknown): boolean {
     );
 }
 
+function isCurrency(o: unknown): boolean {
+    return isString(o);
+}
+
 export default {
     exists,
     isString,
     isNumber,
     isUuid,
+    isCurrency,
 };

@@ -3,6 +3,7 @@ import listWithFees from './listWithFees';
 import paymentEntityGateway from '../../entityGateway/payment';
 import config from '../../config';
 import sinon from 'sinon';
+import exchangeRates from '../../integration/exchangerates';
 
 describe('interactor', () => {
     afterEach(() => {
@@ -83,6 +84,24 @@ describe('interactor', () => {
                 assert.ok(actual);
                 assert.strictEqual(actual.length, 1);
                 assert.strictEqual(actual[0].vendorGets, 99);
+            });
+
+            it('Converts currency correctly', async () => {
+                const amount = 100;
+                const exchangeRate = 0.5;
+                sinon.stub(paymentEntityGateway, 'findAll').resolves([{ amount, transactionFee: 0.01 }] as any);
+                sinon.stub(exchangeRates, 'getLatestRates').resolves(exchangeRate);
+                sinon.stub(config, 'get').returns({ brokerFee: 0.003 } as any);
+
+                const result = await listWithFees('notUSD');
+
+                const actual = result.data;
+                assert.ok(actual);
+                assert.strictEqual(actual.length, 1);
+                assert.strictEqual(actual[0].amount, amount * exchangeRate);
+                assert.strictEqual(actual[0].brokerFee, 0.3 * exchangeRate);
+                assert.strictEqual(actual[0].marketplaceFee, 0.7 * exchangeRate);
+                assert.strictEqual(actual[0].vendorGets, 99 * exchangeRate);
             });
         });
     });
