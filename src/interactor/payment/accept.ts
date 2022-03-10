@@ -13,7 +13,7 @@ export class AcceptSuccess implements ResultBoundary {
 async function accept(
     buyerId: string,
     amount: number,
-    transactionFee = config.defaultMarketplaceFee
+    transactionFee = config.get().defaultMarketplaceFee
 ): Promise<AcceptSuccess> {
     const paymentId = await paymentEntityGateway.create({ buyerId, amount, transactionFee });
     return new AcceptSuccess(paymentId);

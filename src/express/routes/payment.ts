@@ -5,6 +5,7 @@ import paymentInteractor from '../../interactor/payment';
 import { AcceptSuccess } from '../../interactor/payment/accept';
 import validation from '../../util/validation';
 import { GetFailure, GetSuccess } from '../../interactor/payment/get';
+import { ListWithFeesSuccess } from '../../interactor/payment/listWithFees';
 
 const router = express.Router();
 
@@ -31,6 +32,33 @@ router.post(
             result,
             () => {
                 res.status(200).send();
+            },
+            () => {
+                res.status(500).send();
+            }
+        );
+    })
+);
+
+router.get(
+    '/allWithFees',
+    asyncWrapper(async (req, res) => {
+        const result = await paymentInteractor.listWithFees();
+        handleInteractorResult<ListWithFeesSuccess, never>(
+            result,
+            success => {
+                console.log(success.data);
+                res.status(200).send(
+                    success.data.map(datum => ({
+                        id: datum.id,
+                        buyerId: datum.buyerId,
+                        amount: datum.amount,
+                        transactionFee: datum.transactionFee,
+                        marketplaceFee: datum.marketplaceFee,
+                        brokerFee: datum.brokerFee,
+                        vendorGets: datum.vendorGets,
+                    }))
+                );
             },
             () => {
                 res.status(500).send();
