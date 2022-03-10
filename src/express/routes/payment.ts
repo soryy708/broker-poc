@@ -10,7 +10,6 @@ const router = express.Router();
 router.post(
     '/',
     asyncWrapper(async (req, res) => {
-        console.log(req.body);
         const { buyerId, amount, transactionFee } = req.body;
 
         if (!validation.exists(buyerId) || !validation.isUuid(buyerId)) {
