@@ -1,5 +1,6 @@
 import { ResultBoundary } from '..';
 import paymentEntityGateway from '../../entityGateway/payment';
+import config from '../../config';
 
 export class AcceptSuccess implements ResultBoundary {
     success = true;
@@ -9,7 +10,11 @@ export class AcceptSuccess implements ResultBoundary {
     }
 }
 
-async function accept(buyerId: string, amount: number, transactionFee = 0.01): Promise<AcceptSuccess> {
+async function accept(
+    buyerId: string,
+    amount: number,
+    transactionFee = config.defaultMarketplaceFee
+): Promise<AcceptSuccess> {
     const paymentId = await paymentEntityGateway.create({ buyerId, amount, transactionFee });
     return new AcceptSuccess(paymentId);
 }
