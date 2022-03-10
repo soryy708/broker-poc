@@ -4,6 +4,7 @@ import { handleInteractorResult } from '../../interactor';
 import paymentInteractor from '../../interactor/payment';
 import { AcceptSuccess } from '../../interactor/payment/accept';
 import validation from '../../util/validation';
+import { GetFailure, GetSuccess } from '../../interactor/payment/get';
 
 const router = express.Router();
 
@@ -33,6 +34,40 @@ router.post(
             },
             () => {
                 res.status(500).send();
+            }
+        );
+    })
+);
+
+router.get(
+    '/:paymentId',
+    asyncWrapper(async (req, res) => {
+        const { paymentId } = req.params;
+
+        if (!validation.exists(paymentId) || !validation.isUuid(paymentId)) {
+            res.status(400).send('validation/paymentId');
+            return;
+        }
+
+        const result = await paymentInteractor.get(paymentId);
+        handleInteractorResult<GetSuccess, GetFailure>(
+            result,
+            success => {
+                res.status(200).send({
+                    id: success.data.id,
+                    buyerId: success.data.buyerId,
+                    amount: success.data.amount,
+                    transactionFee: success.data.transactionFee,
+                });
+            },
+            failure => {
+                switch (failure.reason) {
+                    case 'not found':
+                        res.status(404).send();
+                        break;
+                    default:
+                        res.status(500).send();
+                }
             }
         );
     })
