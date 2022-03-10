@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "target": "es2015",
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "allowJs": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "alwaysStrict": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "suppressExcessPropertyErrors": true,
+        "resolveJsonModule": true
+    },
+    "ts-node": {
+        "files": true
+    }
+}
