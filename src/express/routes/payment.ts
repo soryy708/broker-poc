@@ -47,7 +47,6 @@ router.get(
         handleInteractorResult<ListWithFeesSuccess, never>(
             result,
             success => {
-                console.log(success.data);
                 res.status(200).send(
                     success.data.map(datum => ({
                         id: datum.id,
