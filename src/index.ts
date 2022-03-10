@@ -1,5 +1,7 @@
 import expressServer from './express';
+import { init as initDb } from './db';
 
+void initDb();
 expressServer.init();
 
 process

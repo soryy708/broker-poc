@@ -10,6 +10,7 @@ This project uses [TypeScript](https://www.typescriptlang.org/) with very modern
 
 ## Execution
 
+-   To start the database, run `npm run start-db`
 -   To start the web server, run `npm run start-dev`
 
 Note: This command works only with the non-production build
